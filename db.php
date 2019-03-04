@@ -11,12 +11,6 @@ session_start();
 
 
 
-if(!isset($_SESSION['name']))    {
-	header('Location: login-form.php');
-} else {
-	$nm = $_SESSION['name'];
-	$id_user = $_SESSION['id_user'];
-}
 
 
 

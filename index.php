@@ -2,6 +2,15 @@
 require 'db.php';
 
 require 'func.php';
+
+if(!isset($_SESSION['name']))    {
+  header('Location: login-form.php');
+} else {
+  $nm = $_SESSION['name'];
+  $id_user = $_SESSION['id_user'];
+}
+
+
 $posts = get_post_by_id_user();
 
 
@@ -83,7 +92,7 @@ $posts = get_post_by_id_user();
                     <div class="btn-group">
                       <a href="article.php?id=<?=$post['id']?>" class="btn btn-sm btn-outline-secondary">Подробнее</a>
                       <a href="edit.php?id=<?=$post['id']?>" class="btn btn-sm btn-outline-secondary">Изменить</a>
-                      <a href="delete.php?id=<?=$post['id']?>" class="btn btn-sm btn-outline-secondary" onclick="confirm('are you sure?')">Удалить</a>
+                      <a href="delete.php?id=<?=$post['id']?>" class="btn btn-sm btn-outline-secondary" onclick="return confirm('are you sure?')">Удалить</a>
                     </div>
                   </div>
                 </div>
