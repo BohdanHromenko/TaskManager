@@ -2,6 +2,15 @@
 require 'db.php';
 
 require 'func.php';
+
+if(!isset($_SESSION['name']))    {
+  header('Location: login-form.php');
+} else {
+  $nm = $_SESSION['name'];
+  $id_user = $_SESSION['id_user'];
+}
+
+
 $posts = get_post_by_id_user();
 
 
