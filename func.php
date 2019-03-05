@@ -26,10 +26,16 @@ function get_posts()
 function article_update($data)
 {
 	global $pdo;
-	$sql = 'UPDATE posts SET title=:title, description=:description, img=:img WHERE id=:id';
+
+	if ( !empty($data['img']) )
+	{
+		$sql = 'UPDATE posts SET title=:title, description=:description, img=:img WHERE id=:id';
+	} else {
+		$sql = 'UPDATE posts SET title=:title, description=:description WHERE id=:id';
+	}
 	$statement = $pdo->prepare($sql);
 	$statement->execute($data);
-
+	
 }
 
 function article_delete()
