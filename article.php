@@ -31,6 +31,7 @@ $post = get_posts();
       <p>
         <?=$post['description']?>
       </p>
+        <a href="<?php echo $_SERVER['HTTP_REFERER']; ?>">Назад</a>
     </div>
   </body>
 </html>
