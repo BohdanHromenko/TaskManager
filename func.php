@@ -19,7 +19,7 @@ function get_posts()
 	$params = [':id' => $_GET['id']];
 	$statement = $pdo->prepare($sql);
 	$statement->execute($params);
-	$post = $statement->fetch();
+	$post = $statement->fetch(PDO::FETCH_LAZY);
 	return $post;
 }
 
