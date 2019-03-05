@@ -1,13 +1,10 @@
 <?php
 
-
-
-
 $pdo = new PDO('mysql:host=localhost;dbname=task_manager', 'root', '');
-
 
 session_start();
 
+<<<<<<< HEAD
 
 
 
@@ -27,3 +24,6 @@ if (!$connection) {
 // echo "Connected successfully";
 */
 ?>
+=======
+?>
+>>>>>>> cf77fa9d729064a0f7cd665a438ab030bf6b4058
