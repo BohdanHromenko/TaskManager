@@ -8,7 +8,7 @@ function get_post_by_id_user()
 	$params = [':id_user' => $id_user];
 	$statement = $pdo->prepare($sql);
 	$statement->execute($params);
-	$posts = $statement->fetchAll();
+	$posts = $statement->fetchAll(PDO::FETCH_ASSOC);
 	return $posts;
 }
 
