@@ -1,23 +1,30 @@
 <?php
 require 'db.php';
-
 require 'func.php';
 
-if(!isset($_SESSION['name']))    {
-  header('Location: login-form.php');
-} else {
+if(isset($_SESSION['name'])) {
   $nm = $_SESSION['name'];
   $id_user = $_SESSION['id_user'];
-}
+} elseif ( !isset($_SESSION['name']) and $_COOKIE['user'] ) 
+{
+  $query = 'SELECT id, name FROM users WHERE password=:password';
+  $params = [':password' => $_COOKIE['user']];
+  $statement = $pdo->prepare($query);
+  $statement->execute($params);
+  $row = $statement->fetch();
 
+  if ( isset( $row ) ) {
+    $_SESSION['name'] = $row['name'];
+    $_SESSION['id_user'] = $row['id'];
+  }
+ 
+} else {
+  header('Location: login-form.php');
+}
 
 $posts = get_post_by_id_user();
 
-
 ?>
-
-
-
 
 <!doctype html>
 <html lang="en">
@@ -52,7 +59,7 @@ $posts = get_post_by_id_user();
       </div>
       <div class="navbar navbar-dark bg-dark shadow-sm">
         <div class="container d-flex justify-content-between">
-          <a href="#" class="navbar-brand d-flex align-items-center">
+          <a href="index.php" class="navbar-brand d-flex align-items-center">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
             <strong>Tasks</strong>
           </a>

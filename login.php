@@ -42,6 +42,11 @@ if ( $user ) {
 	{
 		$_SESSION['name'] = $name;
 		$_SESSION['id_user'] = $user;
+
+		if (isset($_REQUEST['remember'])) {
+		setcookie('user', $array['password'], strtotime('+30 days'), '');	
+	}
+
 		header('Location: /index.php');
 	} else {
 		$errorMessage = 'Имя пользователя или пароль введены не правильно';
