@@ -1,47 +1,43 @@
 <?php
 error_reporting(-1);
 require 'db.php';
+require 'func.php';
 
-// Получение данных из $_POST и создание массива
-$array = array(
-'name' => $_POST['name'],
-'email' => $_POST['email'],
-'password' => md5($_POST['password']) // Password hash
+// Array with data from registration form
+$data = array(
+'name' => validateInput($_POST['name']),
+'email' => validateInput($_POST['email']),
+'password' => validateInput($_POST['password'])
 );
 
-// Проверка на пустоту полей ввода
-if ( $array['name'] == '' )
-{
-	$errorMessage = 'Enter your name!';
-	include 'errors.php';
-} elseif ($array['email'] == '' )
-{
-	$errorMessage = 'Enter your email!';
-	include 'errors.php';
-} elseif ($_POST['password'] == '' )
-{
-	$errorMessage = 'Enter your password';
-	include 'errors.php';
-}
+// Form validation for emptiness
+validateField($data);
 
-// Подготовка и выполнение запроса к БД
+// Password length check
+validatePassword();
 
+// Hash password
+$data['password'] = md5($_POST['password']);
+
+// Checking the existence of email in the database
 $sql = 'SELECT id FROM users WHERE email=:email';
 $statement = $pdo->prepare($sql);
-$statement->execute([':email' => $array['email']]);
+$statement->execute([':email' => $data['email']]);
 $user = $statement->fetchColumn();
 if ( $user ) {
-	$errorMessage = 'Пользователь с таким email уже существует';
+	$errorMessage = 'A user with this email already exists';
 	include 'errors.php';
 	exit;
 }
-// Подготовка sql для вставки новой записи
-$sql = 'INSERT INTO users (name, email, password) VALUES (:name, :email, :password)';
-$statement = $pdo->prepare($sql);
 
-$result = $statement->execute($array);
+// Insert data into the database and check for success
+$allowed = array("name","email","password");
+$sql = "INSERT INTO users SET ".pdoSet($allowed,$array,$data);
+$statement = $pdo->prepare($sql);
+$result = $statement->execute($data);
+
 if ( !$result ) {
-	$errorMessage = 'Не удалось зарегестрироватся!';
+	$errorMessage = 'Could not register!';
 	include 'errors.php';
 	exit;
 }

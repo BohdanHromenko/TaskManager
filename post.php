@@ -1,33 +1,29 @@
 <?php
 error_reporting(-1);
 require 'db.php';
+require 'func.php';
 
-// Получение данных из $_POST и создание массива
-$array = array(
+// Array with data from create form
+$data = array(
 'title' => $_POST['title'],
 'description' => $_POST['description'],
 'id_user' => $_SESSION['id_user'],
 'img' => $_FILES['file']['name']
 );
-// Проверка на пустоту полей ввода
-if ( $array['title'] == '' )
-{
-	$errorMessage = 'Enter your title!';
-	include 'errors.php';
-} elseif ($array['description'] == '' )
-{
-	$errorMessage = 'Enter your description!';
-	include 'errors.php';
-}
+
+// Form validation for emptiness
+validateField($data);
 
 if( !empty($_FILES) ){
 	move_uploaded_file($_FILES['file']['tmp_name'], 'upload/' . $_FILES['file']['name']);
 }
 
-$sql = 'INSERT INTO posts (title, description, id_user, img) VALUES (:title, :description, :id_user, :img)';
+// Insert data into the database and check for success
+$allowed = array("title", "description", "id_user", "img");
+$sql = "INSERT INTO posts SET ".pdoSet($allowed,$values,$data);
 $statement = $pdo->prepare($sql);
+$result = $statement->execute($data);
 
-$result = $statement->execute($array);
 if ( !$result ) {
 	$errorMessage = 'Не удалось создать задачу';
 	include 'errors.php';

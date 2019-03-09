@@ -2,7 +2,9 @@
 error_reporting(-1);
 require 'db.php';
 require 'func.php';
-
-article_delete();
+if (isset($_GET['id']))
+{
+	article_delete();
+}
 header('Location: index.php');
 ?>

@@ -1,30 +1,30 @@
 <?php
-error_reporting(-1);
-require 'db.php';
-require 'func.php';
+  error_reporting(-1);
+  require 'db.php';
+  require 'func.php';
 
 $row = get_posts();
 
-if (isset($_POST['submit']))
+if (isset($_POST['submit'])) 
 {
-    $params = array(
-        'title' => $_POST['title'],
-        'description' => $_POST['description'],
-        'id' => $_GET['id']
-    );
+  $params = array(
+  'title' => $_POST['title'],
+  'description' => $_POST['description'],
+  'id' => $_GET['id']
+  );
 
     if( !empty($_FILES) ){
-        move_uploaded_file($_FILES['file']['tmp_name'], 'upload/' . $_FILES['file']['name']);
+      move_uploaded_file($_FILES['file']['tmp_name'], 'upload/' . $_FILES['file']['name']);
     }
 
-    if ( $_FILES['file']['name'] )
+    if ( $_FILES['file']['name'] ) 
     {
-        $params['img'] = $_FILES['file']['name'];
+      $params['img'] = $_FILES['file']['name'];
     }
 
-    article_update($params);
+article_update($params);
 
-    header('Location: index.php');
+header('Location: index.php'); 
 }
 
 
@@ -62,3 +62,6 @@ if (isset($_POST['submit']))
     </div>
   </body>
 </html>
+<?php 
+
+ ?>

@@ -1,28 +1,23 @@
 <?php
 error_reporting(-1);
 require 'db.php';
+require 'func.php';
 // Получение данных из $_POST и создание массива
 $array = array(
 'email' => $_POST['email'],
-'password' => md5($_POST['password']) // Password hash
+'password' => $_POST['password'] // Password hash
 );
 
-// Проверка на пустоту полей ввода
-if ( $array['email'] == '' )
-{
-	$errorMessage = 'Enter your email!';
-	include 'errors.php';
-	exit;
-} elseif ( $_POST['password'] == '' )
-{
-	$errorMessage = 'Enter your password';
-	include 'errors.php';
-	exit;
-} 
+validateField($array);
+
+// Hash password
+$array['password'] = md5($_POST['password']);
+
 
 // Делаем запрос в БД чтобы узнать если такой email
-$sql = 'SELECT id FROM users WHERE email=:email';
-$statement = $pdo->prepare($sql);
+
+$query = 'SELECT * FROM users WHERE email=:email';
+$statement = $pdo->prepare($query);
 $statement->execute([':email' => $array['email']]);
 $user = $statement->fetchColumn();
 
@@ -45,9 +40,8 @@ if ( $user ) {
 
 		if (isset($_REQUEST['remember'])) {
 		setcookie('user', $array['password'], strtotime('+30 days'), '');	
-	}
-
-		header('Location: /index.php');
+}
+	header('Location: index.php');
 	} else {
 		$errorMessage = 'Имя пользователя или пароль введены не правильно';
 		include 'errors.php';
