@@ -19,8 +19,7 @@ function get_posts()
 	$params = [':id' => $_GET['id']];
 	$statement = $pdo->prepare($sql);
 	$statement->execute($params);
-	$post = $statement->fetch(PDO::FETCH_LAZY);
-	return $post;
+	return $statement->fetch(PDO::FETCH_LAZY);
 }
 
 function article_update($data)
@@ -45,6 +44,15 @@ function article_delete()
 	$params = [':id' => $_GET['id']];
 	$statement = $pdo->prepare($sql);
 	$statement->execute($params);
+}
+
+function deleteFile($filename)
+{
+	if (file_exists($filename)) {
+		unlink($filename);
+	} else {
+		header('Location: index.php');
+	}
 }
 
 function check($var) 
@@ -99,5 +107,18 @@ function validateInput($data)
 	$data = htmlspecialchars($data);
 	return $data;
 }
+
+function getRandomFileName($path, $extension='')
+    {
+        $extension = $extension ? '.' . $extension : '';
+        $path = $path ? $path . '/' : '';
+ 
+        do {
+            $name = md5(microtime() . rand(0, 9999));
+            $file = $path . $name . $extension;
+        } while (file_exists($file));
+ 
+        return $name;
+    }
 
 ?>

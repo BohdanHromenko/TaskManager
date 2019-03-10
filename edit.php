@@ -13,14 +13,21 @@ if (isset($_POST['submit']))
   'id' => $_GET['id']
   );
 
-    if( !empty($_FILES) ){
-      move_uploaded_file($_FILES['file']['tmp_name'], 'upload/' . $_FILES['file']['name']);
-    }
+$path = 'upload';
+$extension = strtolower(substr(strrchr($_FILES['file']['name'], '.'), 1));
+$filename = getRandomFileName($path, $extension);
+$filename = $filename . '.' . $extension;
+$target = $path . '/' . $filename;
 
-    if ( $_FILES['file']['name'] ) 
-    {
-      $params['img'] = $_FILES['file']['name'];
-    }
+if( !empty($_FILES) ){
+  move_uploaded_file($_FILES['file']['tmp_name'], $target);
+}
+if ( $filename ) 
+{
+  $params['img'] = $filename;
+  $oldFile = "./upload/".$row['img'];
+  deleteFile($oldFile);
+}
 
 article_update($params);
 

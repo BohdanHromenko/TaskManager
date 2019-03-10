@@ -23,7 +23,7 @@ if(isset($_SESSION['name'])) {
 }
 
 $posts = get_post_by_id_user();
-
+clearstatcache();
 
 ?>
 
